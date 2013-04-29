@@ -52,7 +52,7 @@ describe 'SortParamsPermissionServiceAdditions' do
   describe '#allow_sort_values' do
 
     it 'should insert value into @allow sort values' do
-      @sort_params_permission_service.allow_sort_values('customer','index', 'last_name')
+      @sort_params_permission_service.allow_sort_values('customer', 'index', 'last_name')
       @sort_params_permission_service.instance_variable_get(:@allowed_sort_values)[['customer', 'index']].should eq ['last_name']
     end
 
@@ -62,7 +62,7 @@ describe 'SortParamsPermissionServiceAdditions' do
     end
 
     it 'should insert value for two keys' do
-      @sort_params_permission_service.allow_sort_values(['customer', 'person'], ['index','edit'], 'first_name')
+      @sort_params_permission_service.allow_sort_values(['customer', 'person'], ['index', 'edit'], 'first_name')
       @sort_params_permission_service.instance_variable_get(:@allowed_sort_values)[['customer', 'index']].should eq ['first_name']
       @sort_params_permission_service.instance_variable_get(:@allowed_sort_values)[['person', 'index']].should eq ['first_name']
       @sort_params_permission_service.instance_variable_get(:@allowed_sort_values)[['customer', 'edit']].should eq ['first_name']
