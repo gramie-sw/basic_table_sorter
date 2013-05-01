@@ -1,4 +1,4 @@
-Copyright (c) 2013 Daniel Grawunder, Christian Mierch
+Copyright (c) 2013 Daniel Grawunder, Christian Mierich
 
 Eclipse Public License - v 1.0
 
