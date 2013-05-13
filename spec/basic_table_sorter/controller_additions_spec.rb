@@ -7,7 +7,6 @@ describe 'ControllerAdditions' do
     @controller_class.stub(:helper_method)
     @controller_class.send(:include, BasicTableSorter::ControllerAdditions)
     @controller = @controller_class.new
-
   end
 
   describe '::included' do
