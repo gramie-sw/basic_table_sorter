@@ -11,6 +11,7 @@ module BasicTableSorter
       params = {table_sort: columns, table_sort_direction: sort_direction}.merge(additional_params)
 
       if column_selected
+        #link_to takes automatically current controller and action from params if missing in arguments
         link_to params, class: 'selected-column' do
           content_tag(:span, title) + tag(:i, class: icon_class)
         end

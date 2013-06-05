@@ -11,64 +11,76 @@ describe BasicTableSorter::ViewHelpers do
 
   describe '#sortable' do
 
-    it 'should call link_to with text and prams' do
-      helper.stub(:params).and_return({})
-      helper.should_receive(:link_to).with('Title', {table_sort: :title, table_sort_direction: 'asc'})
-      helper.sortable(:title, 'Title')
-    end
+    context 'column selected' do
 
-    it 'should call link_to with' do
-      helper.stub(:params).and_return({table_sort: 'title'})
-      helper.stub(:table_sort_direction).and_return('asc')
-
-      expected_params = {table_sort: :title, table_sort_direction: 'desc'}
-      helper.should_receive(:link_to).with(expected_params, class: 'selected-column') do |&block|
-        block.call.should eq '<span>Title</span><i class="icon-chevron-down" />'
-      end
-      helper.sortable(:title, 'Title')
-    end
-
-    context 'is selected column and sorted asc' do
-
-      it 'should have icon-chevron-up' do
+      it 'should create link with title and icon' do
+        helper.stub(:params).and_return({table_sort: 'title'})
         helper.stub(:table_sort_direction).and_return('asc')
-        helper.stub(:params).and_return({controller: :users, action: :index, table_sort: 'first_name'})
 
+        expected_params = {table_sort: :title, table_sort_direction: 'desc'}
+        helper.should_receive(:link_to).with(expected_params, class: 'selected-column') do |&block|
+          block.call.should match /<span>Title<\/span><i class="icon-.*" \/>/
+        end
+        helper.sortable(:title, 'Title')
+      end
 
-        helper.should_receive(:link_to).with({table_sort: :first_name, table_sort_direction: 'desc'}, {:class => "selected-column"}) do |&block|
-          block.call.should include('icon-chevron-down')
-        end.once
+      context 'column sorted asc' do
 
-        helper.sortable(:first_name, 'name')
+        before :each do
+          helper.stub(:table_sort_direction).and_return('asc')
+          helper.stub(:params).and_return({controller: 'users', action: 'index', table_sort: 'name'})
+        end
+
+        it 'should have link to sort desc' do
+          helper.should_receive(:link_to).with({:table_sort => :name, :table_sort_direction => "desc"}, {:class => "selected-column"})
+          helper.sortable(:name, 'Name')
+        end
+
+        it 'should have icon-chevron-down' do
+
+          helper.should_receive(:link_to).with(any_args) do |&block|
+            block.call.should include('icon-chevron-down')
+          end.once
+
+          helper.sortable(:name, 'Name')
+        end
+      end
+
+      context 'column sorted desc' do
+
+        before :each do
+          helper.stub(:table_sort_direction).and_return('desc')
+          helper.stub(:params).and_return({controller: 'users', action: 'index', table_sort: 'name'})
+        end
+
+        it 'should have link to sort asc' do
+          helper.should_receive(:link_to).with({:table_sort => :name, :table_sort_direction => "asc"}, {:class => "selected-column"})
+          helper.sortable(:name, 'Name')
+        end
+
+        it 'should have icon-arrow-up' do
+          helper.should_receive(:link_to).with(any_args) do |&block|
+            block.call.should include('icon-chevron-up')
+          end.once
+
+          helper.sortable(:name, 'Name')
+        end
       end
     end
 
-    context 'is selected column and sorted desc' do
+    context 'column not selected' do
 
-      it 'should have icon-arrow-down ' do
-        helper.stub(:table_sort_direction).and_return('desc')
-        helper.stub(:params).and_return({controller: :users, action: :index, table_sort: 'first_name'})
-
-
-        helper.should_receive(:link_to).with({table_sort: :first_name, table_sort_direction: 'asc'}, {:class => "selected-column"}) do |&block|
-          block.call.should include('icon-chevron-up')
-        end.once
-
-        helper.sortable(:first_name, 'name')
+      it 'should return link with title' do
+        helper.stub(:params).and_return({table_sort: 'first_name'})
+        helper.should_receive(:link_to).with('Name', {table_sort: :last_name, table_sort_direction: 'asc'})
+        helper.sortable(:last_name, 'Name')
       end
     end
 
-    context 'is not current column' do
-
-      it 'should have just a title' do
-        helper.stub(:params).and_return({controller: :users, action: :index, table_sort: 'first_name'})
-
-        helper.should_receive(:link_to).with('name', {table_sort: :last_name, table_sort_direction: 'asc'}) do |&block|
-          block.should be nil
-        end.once
-
-        helper.sortable(:last_name, 'name')
-      end
+    it 'should merge additional arguments' do
+      helper.stub(:params).and_return({table_sort: 'title'})
+      helper.should_receive(:link_to).with('Name', {table_sort: :last_name, table_sort_direction: 'asc', extra_param: 'extra_param'})
+      helper.sortable(:last_name, 'Name', extra_param: 'extra_param')
     end
   end
 end
