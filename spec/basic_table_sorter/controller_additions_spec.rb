@@ -61,6 +61,11 @@ describe 'ControllerAdditions' do
       @controller.stub(:params).and_return({table_sort: ['last_name', 'first_name'], table_sort_direction: 'desc'})
       @controller.table_sort_order.should eq "last_name desc, first_name desc"
     end
+
+    it 'should return nil when no param :table_sort present' do
+      @controller.stub(:params).and_return({})
+      @controller.table_sort_order.should be_nil
+    end
   end
 
   describe '#authorize_sort_params' do

@@ -14,7 +14,7 @@ module BasicTableSorter
     end
 
     def table_sort_order
-      Array(params[:table_sort]).join(' ' + table_sort_direction + ', ') + ' ' + table_sort_direction
+      custom_table_sort? ? "#{Array(params[:table_sort]).join(" #{table_sort_direction}, ")} #{table_sort_direction}" : nil
     end
 
     def authorize_sort_params
