@@ -17,12 +17,12 @@ module BasicTableSorter
       custom_table_sort? ? "#{Array(params[:table_sort]).join(" #{table_sort_direction}, ")} #{table_sort_direction}" : nil
     end
 
-    def authorize_sort_params
+    def authorize_table_sort_params
       if params[:table_sort]
-        sort_params_permission_service = SortParamsPermissionService.create
+        sort_params_permission_service = BasicTableSorterPermissionService.create
         Array(params[:table_sort]).each do |value|
-          unless sort_params_permission_service.allowed_sort_value?(params[:controller], params[:action], value)
-            render_500 and return
+          unless sort_params_permission_service.allowed_sort_param?(params[:controller], params[:action], value)
+            raise TableSortParamNotAuthorized, "param table_sort = '#{params[:table_sort]}' not allowed"
           end
         end
       end

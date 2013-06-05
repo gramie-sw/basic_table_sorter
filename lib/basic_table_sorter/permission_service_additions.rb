@@ -1,12 +1,12 @@
 module BasicTableSorter
-  module SortParamsPermissionServiceAdditions
+  module PermissionServiceAdditions
 
-    def allowed_sort_value? controller, action, value
+    def allowed_sort_param? controller, action, value
       allowed = @allowed_sort_values && @allowed_sort_values[[controller.to_s, action.to_s]]
       allowed ? allowed.include?(value) : allowed
     end
 
-    def allow_sort_values controllers, actions, param_values
+    def allow_sort_params controllers, actions, param_values
       @allowed_sort_values ||= {}
       Array(controllers).each do |controller|
         Array(actions).each do |action|

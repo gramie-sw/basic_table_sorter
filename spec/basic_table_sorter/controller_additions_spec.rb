@@ -68,33 +68,29 @@ describe 'ControllerAdditions' do
     end
   end
 
-  describe '#authorize_sort_params' do
+  describe '#authorize_table_sort_params' do
 
-    it 'should call allowed_sort_value? if param with value table_sort exits' do
-      @controller.stub(:params).and_return(table_sort: 'last_name')
-      @controller.stub(:render_500)
-      SortParamsPermissionService.any_instance.should_receive(:allowed_sort_value?)
-      @controller.authorize_sort_params
+    it 'should call allowed_sort_param? if param with value table_sort exits' do
+      @controller.stub(:params).and_return(controller: 'users', action: 'index', table_sort: 'last_name')
+      BasicTableSorterPermissionService.
+          any_instance.should_receive(:allowed_sort_param?).
+          with('users', 'index', 'last_name').
+          and_return(true)
+      @controller.authorize_table_sort_params
     end
 
-    it 'should call render_500 if allowed_sort_value? returns false' do
+    it 'should raise BasicTableSorter::TableSortParamNotAuthorized if allowed_sort_param? returns false' do
       @controller.stub(:params).and_return(table_sort: 'last_name')
-      SortParamsPermissionService.any_instance.stub(:allowed_sort_value?).and_return false
-      @controller.should_receive(:render_500)
-      @controller.authorize_sort_params
+      BasicTableSorterPermissionService.any_instance.stub(:allowed_sort_param?).and_return false
+      expect {
+        @controller.authorize_table_sort_params
+      }.to raise_error BasicTableSorter::TableSortParamNotAuthorized,  "param table_sort = 'last_name' not allowed"
     end
 
-    it 'should not call render_500 if params has no value table sort' do
+    it 'should not call authorize_table_sort_params if params has no value table_sort' do
       @controller.stub(:params).and_return({})
-      @controller.should_not_receive(:render_500)
-      @controller.authorize_sort_params.should eq nil
-    end
-
-    it 'should not call render_500 if allowed_sort_value? is true' do
-      @controller.stub(:params).and_return(table_sort: ['last_name', 'first_name'])
-      SortParamsPermissionService.any_instance.stub(:allowed_sort_value?).and_return true
-      @controller.should_not_receive(:render_500)
-      @controller.authorize_sort_params
+      @controller.should_not_receive(:allowed_sort_param?)
+      @controller.authorize_table_sort_params
     end
   end
 end
