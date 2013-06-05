@@ -8,15 +8,15 @@ module BasicTableSorter
       sort_direction = (column_selected && "asc" == table_sort_direction) ? "desc" : "asc"
       icon_class = sort_direction == 'asc' ? 'icon-chevron-up' : 'icon-chevron-down'
 
-      params = {table_sort: columns, table_sort_direction: sort_direction}.merge(additional_params)
+      link_params = {table_sort: columns, table_sort_direction: sort_direction}.merge(additional_params)
 
       if column_selected
         #link_to takes automatically current controller and action from params if missing in arguments
-        link_to params, class: 'selected-column' do
+        link_to link_params, class: 'selected-column' do
           content_tag(:span, title) + tag(:i, class: icon_class)
         end
       else
-        link_to title, params
+        link_to title, link_params
       end
     end
   end

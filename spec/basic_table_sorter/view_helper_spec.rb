@@ -17,8 +17,8 @@ describe BasicTableSorter::ViewHelpers do
         helper.stub(:params).and_return({table_sort: 'title'})
         helper.stub(:table_sort_direction).and_return('asc')
 
-        expected_params = {table_sort: :title, table_sort_direction: 'desc'}
-        helper.should_receive(:link_to).with(expected_params, class: 'selected-column') do |&block|
+        expected_link_params = {table_sort: :title, table_sort_direction: 'desc'}
+        helper.should_receive(:link_to).with(expected_link_params, class: 'selected-column') do |&block|
           block.call.should match /<span>Title<\/span><i class="icon-.*" \/>/
         end
         helper.sortable(:title, 'Title')
