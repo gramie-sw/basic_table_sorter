@@ -12,11 +12,11 @@ module BasicTableSorter
 
       if column_selected
         #link_to takes automatically current controller and action from params if missing in arguments
-        link_to link_params, class: 'selected-column' do
+        link_to url_for(link_params), class: 'selected-column' do
           content_tag(:span, title) + tag(:i, class: icon_class)
         end
       else
-        link_to title, link_params
+        link_to title, url_for(link_params)
       end
     end
   end
