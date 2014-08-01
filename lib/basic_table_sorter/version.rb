@@ -1,3 +1,3 @@
 module BasicTableSorter
-  VERSION = "0.0.3.beta"
+  VERSION = "1.0.0.beta"
 end
