@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
   gem.test_files = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
-  gem.add_development_dependency "rspec", ">2.14.0"
-  gem.add_development_dependency "actionpack", ">4.0"
-  gem.add_development_dependency "guard-rspec", ">4.2.0"
+  gem.add_development_dependency "rspec", "~>3.0.0"
+  gem.add_development_dependency "actionpack", "~>4.1.0"
+  gem.add_development_dependency "guard-rspec", "~>4.3.0"
 end
